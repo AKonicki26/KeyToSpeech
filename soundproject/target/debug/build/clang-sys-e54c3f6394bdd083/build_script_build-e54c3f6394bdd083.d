@@ -1,0 +1,9 @@
+/mnt/sdb/code/soundproject/target/debug/build/clang-sys-e54c3f6394bdd083/build_script_build-e54c3f6394bdd083.d: /home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build.rs /home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/macros.rs /home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/common.rs /home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/dynamic.rs /home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/static.rs
+
+/mnt/sdb/code/soundproject/target/debug/build/clang-sys-e54c3f6394bdd083/build_script_build-e54c3f6394bdd083: /home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build.rs /home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/macros.rs /home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/common.rs /home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/dynamic.rs /home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/static.rs
+
+/home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build.rs:
+/home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/macros.rs:
+/home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/common.rs:
+/home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/dynamic.rs:
+/home/astridk/.local/share/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.8.1/build/static.rs:
