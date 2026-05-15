@@ -1,4 +1,5 @@
-use evdev::{Device, EventType, Key};
+//use evdev::{Device, EventType, Key};
+use rdev::{Key, listen, Event, EventType};
 
 #[derive(Default)]
 pub struct KeyListener;
@@ -6,8 +7,20 @@ pub struct KeyListener;
 impl KeyListener {
     pub fn listen<F>(&self, callback: F)
     where
-        F: Fn(Key) + Send + Clone + 'static,
+        F: Fn(Event) + Send + Clone + 'static,
     {
+        let listen_thread = std::thread::spawn(|| {
+            if let Err(error) = rdev::listen(callback) {
+                println!("Error: {:?}", error);
+            }
+        });
+
+        // dump the thread join, we don't care about how it ends
+        let _ = listen_thread.join();
+
+
+        // Old, deprecated way of listening to keyboard events
+        /*
         let keyboards = Self::get_keyboards();
 
         if keyboards.is_empty() {
@@ -40,8 +53,14 @@ impl KeyListener {
         for handle in handles {
             let _ = handle.join();
         }
+
+         */
     }
 
+    // Old, deprecated way of listening to keyboard events
+    // No longer needed at all since rdev.
+    // Keeping incase evdev is needed in the future.
+    /*
     fn get_keyboards() -> Vec<Device> {
         let keyboards: Vec<_> = evdev::enumerate()
             .filter_map(|(_, device)| {
@@ -58,4 +77,5 @@ impl KeyListener {
 
         keyboards
     }
+     */
 }

@@ -1,4 +1,4 @@
-use evdev::Key;
+use rdev::Key;
 
 #[derive(Eq, Hash, PartialEq)]
 pub struct TtsKey {
