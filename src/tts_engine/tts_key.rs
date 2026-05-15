@@ -1,6 +1,6 @@
 use rdev::Key;
 
-#[derive(Eq, Hash, PartialEq)]
+#[derive(Eq, Hash, PartialEq, Clone)]
 pub struct TtsKey {
     keycode: Key,
     output: String,
@@ -22,9 +22,7 @@ impl TtsKey {
     pub fn change_key(&mut self, key: Key) {
         self.keycode = key;
     }
-    pub fn get_output(&self) -> &str {
-        self.output.as_str()
-    }
+    pub fn get_output(&self) -> String { self.output.clone() }
 
     pub fn change_output(&mut self, output: Box<str>) {
         self.output = output.to_string();

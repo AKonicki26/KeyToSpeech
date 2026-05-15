@@ -1,65 +1,115 @@
 use std::collections::HashSet;
 use std::sync::mpsc;
-use std::sync::mpsc::Receiver;
+use std::sync::mpsc::{Receiver, Sender};
+use std::thread::JoinHandle;
+use std::time::Duration;
 use rdev::{Event, EventType, Key};
 use tts::Tts;
 use crate::tts_engine::key_listener::KeyListener;
 use crate::tts_engine::tts_key::TtsKey;
 
 pub struct TtsEngine {
-    keyboard: KeyListener,
     hotkeys: HashSet<TtsKey>,
     tts: Tts,
+    keybind_sender: Option<Sender<(Key, String)>>,
+    thread_handle: Option<JoinHandle<()>>,
 }
 
 impl TtsEngine {
     pub fn start(&mut self) {
-        let (tx, rx) = mpsc::channel::<Event>();
+        println!("Starting TTS engine...");
+
+        let (key_tx, key_rx) = mpsc::channel::<Event>();
+        let (bind_tx, bind_rx) = mpsc::channel::<(Key, String)>();
+
+
+
+        self.keybind_sender = Some(bind_tx);
+
+        println!("Starting key listener...");
 
         std::thread::spawn(move || {
-            KeyListener.listen(move |key| {
-                let _ = tx.send(key);
+            KeyListener.listen(move |event| {
+                let _ = key_tx.send(event);
             });
         });
 
-        self.handle_responses(&rx);
+        let hotkeys = std::mem::take(&mut self.hotkeys);
+        let tts = std::mem::replace(
+            &mut self.tts,
+            Tts::default().expect("Error when creating TTS engine"),
+        );
+
+        println!("Starting event loop...");
+
+        self.thread_handle = Some(std::thread::spawn(move || {
+            Self::run_event_loop(key_rx, bind_rx, hotkeys, tts);
+        }));
     }
 
-    fn say_message(&mut self, message: &str) {
-        self.tts.speak(message, true).ok();
-    }
-
-
-    fn handle_keypress(&mut self, key: Key) {
-        match key {
-            Key::F1 => { self.say_message("Hello, world!"); }
-            Key::F2 => { self.say_message("This is message two."); }
-            _ => {}
+    pub fn wait(self) {
+        if let Some(handle) = self.thread_handle {
+            let _ = handle.join();
         }
     }
 
-    fn handle_responses(&mut self, responses: &Receiver<Event>) {
+    pub fn add_keybinding(&mut self, key: Key, output: String) {
+        match &self.keybind_sender {
+            Some(sender) => { let _ = sender.send((key, output)); }
+            None => { self.hotkeys.insert(TtsKey::from_string(key, output)); }
+        }
+    }
 
+    fn run_event_loop(
+        key_rx: Receiver<Event>,
+        bind_rx: Receiver<(Key, String)>,
+        mut hotkeys: HashSet<TtsKey>,
+        mut tts: Tts,
+    ) {
+        println!("Listening for key presses...");
+        loop {
+            // add keybinds to the system if any are requested
+            Self::process_bind_queue(&bind_rx, &mut hotkeys);
 
-        for event in responses {
-            match event.event_type {
-                EventType::KeyPress(key) => self.handle_keypress(key),
-                _ => {}
+            // check for key presses
+            match key_rx.recv_timeout(Duration::from_millis(10)) {
+                // if a key press is detected, handle it
+                Ok(event) => {
+                    if let EventType::KeyPress(key) = event.event_type {
+                        Self::handle_keypress(key, &hotkeys, &mut tts);
+                    }
+                }
+                // if we errored for some reason, continue or exit
+                Err(mpsc::RecvTimeoutError::Timeout) => {}
+                Err(mpsc::RecvTimeoutError::Disconnected) => break,
             }
         }
     }
 
-    fn add_keybinding(&mut self, key: Key, output: String) {
-        self.hotkeys.insert(TtsKey::from_string(key, output));
+    fn process_bind_queue(bind_rx: &Receiver<(Key, String)>, hotkeys: &mut HashSet<TtsKey>) {
+        while let Ok((key, output)) = bind_rx.try_recv() {
+            hotkeys.insert(TtsKey::from_string(key, output));
+        }
+    }
+
+    fn handle_keypress(key: Key, hotkeys: &HashSet<TtsKey>, tts: &mut Tts) {
+        let message = hotkeys.iter()
+            .find(|hotkey| hotkey.is_same_key(key))
+            .map(|hotkey| hotkey.get_output());
+
+        if let Some(msg) = message {
+            tts.speak(msg, true).ok();
+        }
     }
 }
 
 impl Default for TtsEngine {
     fn default() -> Self {
         Self {
-            keyboard: KeyListener::default(),
             hotkeys: HashSet::new(),
-            tts: Tts::default().expect("Error when creating TTS engine")
+            tts: Tts::default().expect("Error when creating TTS engine"),
+            keybind_sender: None,
+            thread_handle: None,
         }
     }
 }
