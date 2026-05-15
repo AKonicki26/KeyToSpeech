@@ -8,7 +8,7 @@ fn main() {
 
     tts_engine.start();
 
-    tts_engine.add_keybinding(rdev::Key::F1, "Hello, world!".to_string());
+    tts_engine.add_keybinding(rdev::Key::KeyA, "Hello, world!".to_string());
 
     println!("Hello, world!");
 

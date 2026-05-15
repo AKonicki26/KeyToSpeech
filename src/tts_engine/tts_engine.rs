@@ -17,16 +17,10 @@ pub struct TtsEngine {
 
 impl TtsEngine {
     pub fn start(&mut self) {
-        println!("Starting TTS engine...");
-
         let (key_tx, key_rx) = mpsc::channel::<Event>();
         let (bind_tx, bind_rx) = mpsc::channel::<(Key, String)>();
 
-
-
         self.keybind_sender = Some(bind_tx);
-
-        println!("Starting key listener...");
 
         std::thread::spawn(move || {
             KeyListener.listen(move |event| {
@@ -39,8 +33,6 @@ impl TtsEngine {
             &mut self.tts,
             Tts::default().expect("Error when creating TTS engine"),
         );
-
-        println!("Starting event loop...");
 
         self.thread_handle = Some(std::thread::spawn(move || {
             Self::run_event_loop(key_rx, bind_rx, hotkeys, tts);
@@ -66,7 +58,7 @@ impl TtsEngine {
         mut hotkeys: HashSet<TtsKey>,
         mut tts: Tts,
     ) {
-        println!("Listening for key presses...");
+        println!("Event loop started");
         loop {
             // add keybinds to the system if any are requested
             Self::process_bind_queue(&bind_rx, &mut hotkeys);
@@ -98,6 +90,7 @@ impl TtsEngine {
             .map(|hotkey| hotkey.get_output());
 
         if let Some(msg) = message {
+            println!("Hotkey Pressed: {:?}", key);
             tts.speak(msg, true).ok();
         }
     }
