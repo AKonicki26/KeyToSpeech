@@ -12,6 +12,9 @@ fn main() {
 
     println!("Hello, world!");
 
+    tts_engine.modify_keybinding(rdev::Key::KeyA, "Second Keybind".to_string());
+    tts_engine.remove_keybinding(rdev::Key::KeyA);
+
     tts_engine.wait();
 
 

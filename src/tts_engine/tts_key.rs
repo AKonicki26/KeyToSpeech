@@ -31,6 +31,10 @@ impl TtsKey {
     pub fn is_same_key(&self, key: Key) -> bool {
         self.keycode == key
     }
+}
 
-
+impl PartialEq<Key> for TtsKey {
+    fn eq(&self, other: &Key) -> bool {
+        self.is_same_key(*other)
+    }
 }

@@ -48,7 +48,22 @@ impl TtsEngine {
     pub fn add_keybinding(&mut self, key: Key, output: String) {
         match &self.keybind_sender {
             Some(sender) => { let _ = sender.send((key, output)); }
-            None => { self.hotkeys.insert(TtsKey::from_string(key, output)); }
+            None => { panic!("Cannot add keybindings before starting the engine"); }
+        }
+    }
+
+    pub fn modify_keybinding(&mut self, key: Key, output: String) {
+        match &self.keybind_sender {
+            Some(sender) => { let _ = sender.send((key, output)); }
+            None => { panic!("Cannot modify keybindings before starting the engine");
+            }
+        }
+    }
+
+    pub fn remove_keybinding(&mut self, key: Key) {
+        match &self.keybind_sender {
+            Some(sender) => { let _ = sender.send((key, "".to_string())); }
+            None => { panic!("Cannot remove keybindings before starting the engine"); }
         }
     }
 
@@ -80,7 +95,17 @@ impl TtsEngine {
 
     fn process_bind_queue(bind_rx: &Receiver<(Key, String)>, hotkeys: &mut HashSet<TtsKey>) {
         while let Ok((key, output)) = bind_rx.try_recv() {
+            // clear any existing keybinds for this key
+            hotkeys.retain(|hotkey| !hotkey.is_same_key(key));
+
+            // if the output is empty, return early since we don't need to add anything
+            if output.is_empty() {
+                continue;
+            }
+
+            // add the new keybind
             hotkeys.insert(TtsKey::from_string(key, output));
+            println!("Added keybind: {:?}", key);
         }
     }
 
