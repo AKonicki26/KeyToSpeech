@@ -8,8 +8,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="PiperSharp" Version="1.0.6" />
-      <PackageReference Include="SharpCompress" Version="0.49.1" />
+      <PackageReference Include="NAudio" Version="2.2.1" />
+      <!-- Used only for its bundled cross-platform espeak-ng native binaries + data (content/espeak). -->
+      <PackageReference Include="KokoroSharp" Version="0.6.7" ExcludeAssets="all" GeneratePathProperty="true" />
     </ItemGroup>
+
+    <Target Name="CopyEspeakNg" AfterTargets="Build">
+        <ItemGroup>
+            <EspeakFiles Include="$(PkgKokoroSharp)\content\espeak\**\*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(EspeakFiles)" DestinationFiles="@(EspeakFiles->'$(OutDir)espeak\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    </Target>
 
 </Project>
