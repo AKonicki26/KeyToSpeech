@@ -5,7 +5,7 @@ namespace Tts;
 
 public class TtsEngine
 {
-    public static async Task Main()
+    public static async Task Main2()
     {
         
         
