@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace KeyToSpeech.Views;
 
-public partial class TtsEntryBox : UserControl
+public partial class VoiceSettingsPanel : UserControl
 {
-    public TtsEntryBox()
+    public VoiceSettingsPanel()
     {
         InitializeComponent();
     }

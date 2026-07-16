@@ -18,13 +18,9 @@ public class TomodachiMessageQueue
     {
         // Ensure containing directory exists before storing any files i it
         Directory.CreateDirectory(MessageDirectory);
-        Console.WriteLine("HI");
 
         for (int i = _maxTempFiles; i >= 1; i--)
             _fileLocationSet.Add($"tmp{i}.wav");
-        
-        foreach (var fileLocation in _fileLocationSet)
-            Console.WriteLine(fileLocation);
     }
     
     public async Task InsertAndProcessMessage(TomodachiMessage message)

@@ -8,21 +8,12 @@ public class TomodachiTtsService
     
     public static void StartMessageQueue()
     {
+        Console.WriteLine("Starting message queue");
         _ = Task.Run(async () => _tomodachiMessageQueue.PlayMessagesInQueueLoop());
     } 
     
     public static async Task SpeakMessage(string message, TomodachiVoice voice)
     {
-        /*
-        var response = await TomodachiTtsEngine.GetVoiceResponse(message, voice);
-
-        var soundFileLocation = _messageQueue.GetNextAvailableFileLocation();
-        
-        await TomodachiTtsEngine.WriteSoundBytesToFile(response, soundFileLocation);
-        
-        await TomodachiTtsEngine.PlaySound(soundFileLocation);
-        */
-
         var tomodachiMessage = new TomodachiMessage(message, voice);
         _ = Task.Run(() => _tomodachiMessageQueue.InsertAndProcessMessage(tomodachiMessage));
         

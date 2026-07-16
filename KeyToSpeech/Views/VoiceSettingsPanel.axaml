@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:KeyToSpeech.ViewModels"
+             mc:Ignorable="d"
+             x:Class="KeyToSpeech.Views.VoiceSettingsPanel"
+             x:DataType="vm:VoiceSettingsViewModel">
+
+    <Border BorderBrush="{DynamicResource TextControlBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="4"
+            Padding="12">
+        <Grid ColumnDefinitions="80,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Pitch" VerticalAlignment="Center"/>
+            <Slider Grid.Row="0" Grid.Column="1"
+                    Minimum="0" Maximum="100"
+                    Value="{Binding VoicePitch}"
+                    TickFrequency="1" IsSnapToTickEnabled="True"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Speed" VerticalAlignment="Center"/>
+            <Slider Grid.Row="1" Grid.Column="1"
+                    Minimum="0" Maximum="100"
+                    Value="{Binding VoiceSpeed}"
+                    TickFrequency="1" IsSnapToTickEnabled="True"/>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Quality" VerticalAlignment="Center"/>
+            <Slider Grid.Row="2" Grid.Column="1"
+                    Minimum="0" Maximum="100"
+                    Value="{Binding VoiceQuality}"
+                    TickFrequency="1" IsSnapToTickEnabled="True"/>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Tone" VerticalAlignment="Center"/>
+            <Slider Grid.Row="3" Grid.Column="1"
+                    Minimum="0" Maximum="100"
+                    Value="{Binding VoiceTone}"
+                    TickFrequency="1" IsSnapToTickEnabled="True"/>
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Accent" VerticalAlignment="Center"/>
+            <Slider Grid.Row="4" Grid.Column="1"
+                    Minimum="0" Maximum="100"
+                    Value="{Binding VoiceAccent}"
+                    TickFrequency="1" IsSnapToTickEnabled="True"/>
+
+        </Grid>
+    </Border>
+
+</UserControl>

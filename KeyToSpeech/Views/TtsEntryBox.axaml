@@ -1,12 +1,41 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:KeyToSpeech.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="KeyToSpeech.Views.TtsEntryBox">
-    <Grid>
-        <TextBox Watermark="Enter A TTS Message Here..."></TextBox>
-        <Button Content="Send" Click="OnSendButtonClick"></Button>
-    </Grid>
-    
+             x:Class="KeyToSpeech.Views.TtsEntryBox"
+             x:DataType="vm:TtsEntryViewModel">
+
+    <Design.DataContext>
+        <vm:TtsEntryViewModel/>
+    </Design.DataContext>
+
+    <Border BorderBrush="{DynamicResource TextControlBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="4">
+        <Grid ColumnDefinitions="*,Auto">
+
+            <TextBox Grid.Column="0"
+                     Watermark="Enter a TTS message..."
+                     Text="{Binding TtsMessageText}"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     VerticalContentAlignment="Center">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Enter" Command="{Binding SendTtsMessageCommand}"/>
+                </TextBox.KeyBindings>
+            </TextBox>
+
+            <Button Grid.Column="1"
+                    Content="Send"
+                    Command="{Binding SendTtsMessageCommand}"
+                    BorderThickness="0"
+                    CornerRadius="0"
+                    VerticalAlignment="Stretch"
+                    Padding="16,0"/>
+
+        </Grid>
+    </Border>
+
 </UserControl>

@@ -2,8 +2,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="using:KeyToSpeech.Views"
         x:Class="KeyToSpeech.MainWindow"
-        Title="KeyToSpeech" Height="450" Width="800">
-    <Grid>
-        <views:TtsEntryBox></views:TtsEntryBox>
-    </Grid>
+        Title="KeyToSpeech"
+        MinWidth="400"
+        SizeToContent="WidthAndHeight">
+    <DockPanel>
+        <views:TtsEntryBox x:Name="TtsEntryBox" DockPanel.Dock="Bottom" Margin="8"/>
+        <views:VoiceSettingsPanel x:Name="VoiceSettingsPanel" Margin="8"/>
+    </DockPanel>
 </Window>
