@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Tts.TomodachiAPI.Models;
@@ -39,7 +40,7 @@ public class MessageQueue
         RemoveFileLocation(message.FileLocation);
         
         // TODO: Move this to the message so only it can assign IsReadyToPlay
-        Console.WriteLine($"Assigning message {message.Message} to sound file {message.FileLocation}");
+        Debug.WriteLine($"Assigning message {message.Message} to sound file {message.FileLocation}");
         
         await TomodachiTtsEngine.WriteSoundBytesToFile(response, message.FileLocation);
 
@@ -56,7 +57,7 @@ public class MessageQueue
             // wait for the message to be ready to play
             while (!message.IsReadyToPlay) { Thread.Sleep(100); }
                 
-            Console.WriteLine($"Playing message {message.Message} from file {message.FileLocation}");
+            Debug.WriteLine($"Playing message {message.Message} from file {message.FileLocation}");
 
             if (message.FileLocation == null)
             {
