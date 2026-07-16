@@ -42,19 +42,24 @@ internal static class TomodachiTtsEngine
 #pragma warning disable CA1416 
     internal static async Task PlaySound(string fileLocation)
     {
+        await PlaySound(fileLocation, _soundPlayer);
+    }
+    
+    internal static async Task PlaySound(string fileLocation, SoundPlayer? player)
+    {
         // if the sound player has not yet been initialized, do so
-        if (_soundPlayer == null)
+        if (player == null)
         {
-            _soundPlayer = new SoundPlayer(fileLocation);
+            player = new SoundPlayer(fileLocation);
         }
         // otherwise we can avoid reallocation and just change the location its reading from
         else
         {
-            _soundPlayer.SoundLocation = fileLocation;
+            player.SoundLocation = fileLocation;
         }
         
-        _soundPlayer.LoadAsync();
-        _soundPlayer.PlaySync();
+        player.LoadAsync();
+        player.PlaySync();
     }
 #pragma warning restore CA1416
 }
