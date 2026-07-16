@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Media;
+using Tts.TomodachiAPI.Models;
 
 namespace Tts.TomodachiAPI;
 
@@ -13,16 +14,24 @@ public static class TomodachiAPI
     
     public static async Task Main()
     {
-
+        
+        TomodachiVoice voice = new TomodachiVoice();
+        string? message;
+        
+        TomodachiTtsService.StartMessageQueue();
+        
         while (true)
         {
-            var message = Console.ReadLine();
-            if (message == "exit") 
+            
+            message = Console.ReadLine();
+            if (message == "exit" || message == null) 
             {
                 break;
             }
             
-            GetSoundAndPlayIt(message);
+            var messageCopy = message;
+            
+            _ = Task.Run(async () => await TomodachiTtsService.SpeakMessage(messageCopy, voice));
         }
 
         Console.WriteLine("Shutting down...");
@@ -37,8 +46,6 @@ public static class TomodachiAPI
             Text = message,
             Pitch = 75,
         };
-        
-        var jsonBody = requestPayload.SerializeToJson();
 
         using (var request = new HttpRequestMessage(HttpMethod.Get, $"{apiPath}?{requestPayload.ApiParamString}"))
         {
