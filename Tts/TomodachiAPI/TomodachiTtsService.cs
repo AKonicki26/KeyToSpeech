@@ -4,11 +4,11 @@ namespace Tts.TomodachiAPI;
 
 public class TomodachiTtsService
 {
-    private static MessageQueue _messageQueue = new();
+    private static TomodachiMessageQueue _tomodachiMessageQueue = new();
     
     public static void StartMessageQueue()
     {
-        _ = Task.Run(async () => _messageQueue.PlayMessagesInQueueLoop());
+        _ = Task.Run(async () => _tomodachiMessageQueue.PlayMessagesInQueueLoop());
     } 
     
     public static async Task SpeakMessage(string message, TomodachiVoice voice)
@@ -24,7 +24,7 @@ public class TomodachiTtsService
         */
 
         var tomodachiMessage = new TomodachiMessage(message, voice);
-        _ = Task.Run(() => _messageQueue.InsertAndProcessMessage(tomodachiMessage));
+        _ = Task.Run(() => _tomodachiMessageQueue.InsertAndProcessMessage(tomodachiMessage));
         
     }
 }

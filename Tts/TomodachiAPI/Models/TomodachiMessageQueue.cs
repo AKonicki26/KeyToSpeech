@@ -1,16 +1,20 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Media;
 
 namespace Tts.TomodachiAPI.Models;
 
-public class MessageQueue
+public class TomodachiMessageQueue
 {
     private static readonly string MessageDirectory = "./voiceFiles/temps";
     private static int _maxTempFiles = 5;
-    
+    private readonly ConcurrentQueue<TomodachiMessage> _messageQueue = new();
+    private readonly SortedSet<string> _fileLocationSet = new();
+    private readonly ReaderWriterLockSlim _fileSetLock = new();
+    private readonly SoundPlayer? _player = null;
 
-    public MessageQueue()
+    public TomodachiMessageQueue()
     {
         // Ensure containing directory exists before storing any files i it
         Directory.CreateDirectory(MessageDirectory);
@@ -23,28 +27,19 @@ public class MessageQueue
             Console.WriteLine(fileLocation);
     }
     
-    
-
     public async Task InsertAndProcessMessage(TomodachiMessage message)
     {
         _messageQueue.Enqueue(message);
-        
-        var response = await TomodachiTtsEngine.GetVoiceResponse(message.Message, message.Voice);
-        
+
+        string? fileLocation = null;
         // loop trying to get a file location until we actually get one
-        while ((message.FileLocation = GetNextAvailableFileLocation()) == null)
+        while ((fileLocation = GetNextAvailableFileLocation()) == null)
         {
             Thread.Sleep(100);
         }
-        
-        RemoveFileLocation(message.FileLocation);
-        
-        // TODO: Move this to the message so only it can assign IsReadyToPlay
-        Debug.WriteLine($"Assigning message {message.Message} to sound file {message.FileLocation}");
-        
-        await TomodachiTtsEngine.WriteSoundBytesToFile(response, message.FileLocation);
+        RemoveFileLocation(fileLocation);
 
-        message.IsReadyToPlay = true;
+        await message.Process(fileLocation);
     }
 
     [DoesNotReturn]
@@ -64,7 +59,7 @@ public class MessageQueue
                 throw new Exception("File Location of a message is null. It cannot be played");
             }
             
-            await TomodachiTtsEngine.PlaySound(message.FileLocation);
+            await TomodachiTtsEngine.PlaySound(message.FileLocation, _player);
                 
             // This file is no longer being used for TTS messages, re-queue the location
             AddFileLocation(message.FileLocation);
@@ -72,15 +67,7 @@ public class MessageQueue
         // ReSharper disable once FunctionNeverReturns
     }
     
-    
-    
-    // methods relating to the queue
-    private ConcurrentQueue<TomodachiMessage> _messageQueue = new();
-    private SortedSet<string> _fileLocationSet = new();
-
-
-    private readonly ReaderWriterLockSlim _fileSetLock = new();
-
+    // Sorted Set helper functions
     private bool AddFileLocation(string location)
     {
         _fileSetLock.EnterWriteLock();
