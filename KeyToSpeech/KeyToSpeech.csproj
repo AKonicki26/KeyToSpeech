@@ -15,4 +15,13 @@
         <PackageReference Include="Tmds.DBus.Protocol" Version="0.94.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="App.xaml.cs">
+        <DependentUpon>App.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="MainWindow.xaml.cs">
+        <DependentUpon>MainWindow.axaml</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>
