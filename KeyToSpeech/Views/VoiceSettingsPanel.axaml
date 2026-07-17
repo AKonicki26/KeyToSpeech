@@ -3,15 +3,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:KeyToSpeech.ViewModels"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              x:Class="KeyToSpeech.Views.VoiceSettingsPanel"
              x:DataType="vm:VoiceSettingsViewModel">
+
+        <Design.DataContext>
+                <vm:VoiceSettingsViewModel/>
+        </Design.DataContext>
 
     <Border BorderBrush="{DynamicResource TextControlBorderBrush}"
             BorderThickness="1"
             CornerRadius="4"
             Padding="12">
-        <Grid ColumnDefinitions="80,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+        <Grid ColumnDefinitions="80,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Pitch" VerticalAlignment="Center"/>
             <Slider Grid.Row="0" Grid.Column="1"
@@ -40,9 +45,63 @@
             <TextBlock Grid.Row="4" Grid.Column="0" Text="Accent" VerticalAlignment="Center"/>
             <Slider Grid.Row="4" Grid.Column="1"
                     Minimum="0" Maximum="100"
-                    Value="{Binding VoiceAccent}"
+                    Value="{Binding VoiceAccent }"
                     TickFrequency="1" IsSnapToTickEnabled="True"/>
 
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Intonation" VerticalAlignment="Center"/>
+            <Grid Grid.Row="5" Grid.Column="1" ColumnDefinitions="Auto, Auto, Auto, Auto" RowDefinitions="Auto">
+                    <Button Grid.Column="0"
+                            Content="1"
+                            Command="{Binding IntonationButtonClickedCommand}"
+
+                            BorderThickness="0"
+                            CornerRadius="0"
+                            VerticalAlignment="Stretch"
+                            Padding="16,0">
+                            <Button.CommandParameter>
+                                    <sys:Int32>1</sys:Int32>
+                            </Button.CommandParameter>
+                    </Button>
+
+                    <Button Grid.Column="1"
+                            Content="2"
+                            Command="{Binding IntonationButtonClickedCommand}"
+
+                            BorderThickness="0"
+                            CornerRadius="0"
+                            VerticalAlignment="Stretch"
+                            Padding="16,0">
+                            <Button.CommandParameter>
+                                    <sys:Int32>2</sys:Int32>
+                            </Button.CommandParameter>
+                    </Button>
+
+                    <Button Grid.Column="2"
+                            Content="3"
+                            Command="{Binding IntonationButtonClickedCommand}"
+
+                            BorderThickness="0"
+                            CornerRadius="0"
+                            VerticalAlignment="Stretch"
+                            Padding="16,0">
+                            <Button.CommandParameter>
+                                    <sys:Int32>3</sys:Int32>
+                            </Button.CommandParameter>
+                    </Button>
+
+                    <Button Grid.Column="3"
+                            Content="4"
+                            Command="{Binding IntonationButtonClickedCommand}"
+
+                            BorderThickness="0"
+                            CornerRadius="0"
+                            VerticalAlignment="Stretch"
+                            Padding="16,0">
+                            <Button.CommandParameter>
+                                    <sys:Int32>4</sys:Int32>
+                            </Button.CommandParameter>
+                    </Button>
+            </Grid >
         </Grid>
     </Border>
 

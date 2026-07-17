@@ -1,5 +1,7 @@
 
+using Avalonia.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using KeyToSpeech.Services;
 using Tts.TomodachiAPI.Models;
 
@@ -36,6 +38,19 @@ public partial class VoiceSettingsViewModel(VoiceService voiceService) : Observa
     {
         voiceService.ActiveVoice.Accent = value;
     }
+
+    [RelayCommand]
+    public void IntonationButtonClicked(int number)
+    {
+        // Button values are hardcoded. This cannot fail
+        // var _ = numberEntry.TryParseInt(out var number);
+
+
+        Console.WriteLine($"Intonation button clicked: {number}");
+        voiceService.ActiveVoice.Intonation = number;
+    }
+
+
 
 
 }
