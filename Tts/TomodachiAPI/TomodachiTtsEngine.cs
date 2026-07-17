@@ -1,4 +1,6 @@
-﻿using System.Media;
+﻿using System.Diagnostics;
+using System.Media;
+using NAudio.Wave;
 using Tts.TomodachiAPI.Models;
 
 namespace Tts.TomodachiAPI;
@@ -24,9 +26,12 @@ internal static class TomodachiTtsEngine
         var requestUrl = $"{TomodachiApiUrl}?{GetApiParams(message, voice)}";
 
         using var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
-        
+
+        Debug.WriteLine($"Sending API request for {message}");
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
+
+        Debug.WriteLine($"Got file back for {message}");
         
         return response.Content;
     }
@@ -34,15 +39,30 @@ internal static class TomodachiTtsEngine
     internal static async Task WriteSoundBytesToFile(HttpContent content, string fileLocation)
     {
         using var diskStream = new FileStream(fileLocation, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-        
+
+        Debug.WriteLine($"Writing to {fileLocation}");
         await content.CopyToAsync(diskStream);
+        Debug.WriteLine($"Finished writing to {fileLocation}");
     }
 
 // disable warning since SoundPlayer is Windows only
 #pragma warning disable CA1416 
     internal static async Task PlaySound(string fileLocation)
     {
-        await PlaySound(fileLocation, _soundPlayer);
+        Debug.WriteLine($"Playing {fileLocation}");
+        using (var outputDevice = new WaveOutEvent())
+        using (var audioFile = new AudioFileReader(fileLocation))
+        {
+            outputDevice.Init(audioFile);
+
+            outputDevice.Play();
+
+            // while we are playing, sleep fo
+            while (outputDevice.PlaybackState == PlaybackState.Playing)
+            {
+                Thread.Sleep(10);
+            }
+        }
     }
     
     internal static async Task PlaySound(string fileLocation, SoundPlayer? player)

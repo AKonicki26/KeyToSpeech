@@ -2,9 +2,10 @@
 
 namespace Tts.TomodachiAPI;
 
-public class TomodachiTtsService
+public static class TomodachiTtsService
 {
-    private static TomodachiMessageQueue _tomodachiMessageQueue = new();
+    private static readonly string MessageDirectory = "./voiceFiles";
+    private static TomodachiMessageQueue _tomodachiMessageQueue = new(MessageDirectory);
     
     public static void StartMessageQueue()
     {
@@ -16,6 +17,5 @@ public class TomodachiTtsService
     {
         var tomodachiMessage = new TomodachiMessage(message, voice);
         _ = Task.Run(() => _tomodachiMessageQueue.InsertAndProcessMessage(tomodachiMessage));
-        
     }
 }
