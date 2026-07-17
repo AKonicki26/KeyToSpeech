@@ -20,7 +20,7 @@ public class TomodachiMessageQueue
         _messageDirectory = messageDirectory;
         _temporaryMessageDirectory =  Path.Combine(_messageDirectory, "temps");
         // Ensure containing directory exists before storing any files i it
-        Directory.CreateDirectory(_messageDirectory);
+        Directory.CreateDirectory(_temporaryMessageDirectory);
 
         for (int i = _maxTempFiles; i >= 1; i--)
             _fileLocationSet.Add($"{Path.Combine(_temporaryMessageDirectory, $"tmp{i}.wav")}");
