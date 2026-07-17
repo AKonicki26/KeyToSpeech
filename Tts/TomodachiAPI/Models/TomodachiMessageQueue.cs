@@ -66,12 +66,6 @@ public class TomodachiMessageQueue
         }
         // ReSharper disable once FunctionNeverReturns
     }
-
-
-    private async Task PlayMessage(string fileLocation)
-    {
-
-    }
     
     // Sorted Set helper functions
     private bool AddFileLocation(string location)
