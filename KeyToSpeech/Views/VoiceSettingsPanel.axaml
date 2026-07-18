@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:KeyToSpeech.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:tomodachiApi="clr-namespace:Tts.TomodachiAPI;assembly=Tts"
              mc:Ignorable="d"
              x:Class="KeyToSpeech.Views.VoiceSettingsPanel"
              x:DataType="vm:VoiceSettingsViewModel">
@@ -16,37 +17,103 @@
             BorderThickness="1"
             CornerRadius="4"
             Padding="12">
-        <Grid ColumnDefinitions="80,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+        <Grid ColumnDefinitions="80,*,50" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto, Auto">
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Pitch" VerticalAlignment="Center"/>
             <Slider Grid.Row="0" Grid.Column="1"
                     Minimum="0" Maximum="100"
                     Value="{Binding VoicePitch}"
                     TickFrequency="1" IsSnapToTickEnabled="True"/>
+            <NumericUpDown Grid.Row="0" Grid.Column="2"
+                            Value="{Binding VoicePitch}"
+                            Maximum="100"
+                            Minimum="0"
+                            Increment="1"
+                            FormatString="F0"
+                            ShowButtonSpinner="False"
+                            MinWidth="0"
+                            MinHeight="0"
+                            Padding="2"
+                            FontSize="12"
+                            Width="45"
+                            Height="25"/>
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Speed" VerticalAlignment="Center"/>
             <Slider Grid.Row="1" Grid.Column="1"
                     Minimum="0" Maximum="100"
                     Value="{Binding VoiceSpeed}"
                     TickFrequency="1" IsSnapToTickEnabled="True"/>
+            <NumericUpDown Grid.Row="1" Grid.Column="2"
+                           Value="{Binding VoiceSpeed}"
+                           Maximum="100"
+                           Minimum="0"
+                           Increment="1"
+                           FormatString="F0"
+                           ShowButtonSpinner="False"
+                           MinWidth="0"
+                           MinHeight="0"
+                           Padding="2"
+                           FontSize="12"
+                           Width="45"
+                           Height="25"/>
+
 
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Quality" VerticalAlignment="Center"/>
             <Slider Grid.Row="2" Grid.Column="1"
                     Minimum="0" Maximum="100"
                     Value="{Binding VoiceQuality}"
                     TickFrequency="1" IsSnapToTickEnabled="True"/>
+            <NumericUpDown Grid.Row="2" Grid.Column="2"
+                           Value="{Binding VoiceQuality}"
+                           Maximum="100"
+                           Minimum="0"
+                           Increment="1"
+                           FormatString="F0"
+                           ShowButtonSpinner="False"
+                           MinWidth="0"
+                           MinHeight="0"
+                           Padding="2"
+                           FontSize="12"
+                           Width="45"
+                           Height="25"/>
 
             <TextBlock Grid.Row="3" Grid.Column="0" Text="Tone" VerticalAlignment="Center"/>
             <Slider Grid.Row="3" Grid.Column="1"
                     Minimum="0" Maximum="100"
                     Value="{Binding VoiceTone}"
                     TickFrequency="1" IsSnapToTickEnabled="True"/>
+            <NumericUpDown Grid.Row="3" Grid.Column="2"
+                           Value="{Binding VoiceTone}"
+                           Maximum="100"
+                           Minimum="0"
+                           Increment="1"
+                           FormatString="F0"
+                           ShowButtonSpinner="False"
+                           MinWidth="0"
+                           MinHeight="0"
+                           Padding="2"
+                           FontSize="12"
+                           Width="45"
+                           Height="25"/>
 
             <TextBlock Grid.Row="4" Grid.Column="0" Text="Accent" VerticalAlignment="Center"/>
             <Slider Grid.Row="4" Grid.Column="1"
                     Minimum="0" Maximum="100"
                     Value="{Binding VoiceAccent }"
                     TickFrequency="1" IsSnapToTickEnabled="True"/>
+            <NumericUpDown Grid.Row="4" Grid.Column="2"
+                           Value="{Binding VoiceAccent}"
+                           Maximum="100"
+                           Minimum="0"
+                           Increment="1"
+                           FormatString="F0"
+                           ShowButtonSpinner="False"
+                           MinWidth="0"
+                           MinHeight="0"
+                           Padding="2"
+                           FontSize="12"
+                           Width="45"
+                           Height="25"/>
 
             <TextBlock Grid.Row="5" Grid.Column="0" Text="Intonation" VerticalAlignment="Center"/>
             <Grid Grid.Row="5" Grid.Column="1" ColumnDefinitions="Auto, Auto, Auto, Auto" RowDefinitions="Auto">
@@ -102,6 +169,17 @@
                             </Button.CommandParameter>
                     </Button>
             </Grid >
+
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Language" VerticalAlignment="Center"/>
+            <ComboBox Grid.Row="6" Grid.Column="1"
+                      ItemsSource="{Binding TomodachiLanguages}"
+                      SelectedValue="{Binding ActiveLanguage}">
+                    <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="tomodachiApi:TomodachiLanguage">
+                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                            </DataTemplate>
+                    </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
     </Border>
 

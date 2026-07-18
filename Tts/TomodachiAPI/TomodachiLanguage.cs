@@ -3,17 +3,22 @@
 public class TomodachiLanguage
 {
     public string LanguageCode { get; }
-    
-    private TomodachiLanguage(string languageCode) {  LanguageCode = languageCode; }
+    public string Name { get; }
 
-    public static TomodachiLanguage UnitedStatesEnglish { get; } = new("useng");
-    public static TomodachiLanguage EuropeEnglish { get; } = new("eueng");
-    public static TomodachiLanguage Spanish { get; } = new("es");
-    public static TomodachiLanguage German { get; } = new("de");
-    public static TomodachiLanguage French { get; } = new("fr");
-    public static TomodachiLanguage Italian { get; } = new("it");
-    public static TomodachiLanguage Japanese { get; } = new("jp");
-    public static TomodachiLanguage Korean { get; } = new("kr");
+    private TomodachiLanguage(string languageCode, string name)
+    {
+        LanguageCode = languageCode;
+        Name = name;
+    }
+
+    public static TomodachiLanguage UnitedStatesEnglish { get; } = new("useng", "United States English");
+    public static TomodachiLanguage EuropeEnglish { get; } = new("eueng", "European English");
+    public static TomodachiLanguage Spanish { get; } = new("es", "Spanish");
+    public static TomodachiLanguage German { get; } = new("de", "German");
+    public static TomodachiLanguage French { get; } = new("fr", "French");
+    public static TomodachiLanguage Italian { get; } = new("it", "Italian");
+    public static TomodachiLanguage Japanese { get; } = new("jp", "Japanese");
+    public static TomodachiLanguage Korean { get; } = new("kr", "Korean");
 
     public override string ToString() => LanguageCode;
 }
