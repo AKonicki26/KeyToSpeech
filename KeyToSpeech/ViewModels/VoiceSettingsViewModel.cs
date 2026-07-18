@@ -3,6 +3,7 @@ using Avalonia.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KeyToSpeech.Services;
+using Tts.TomodachiAPI;
 using Tts.TomodachiAPI.Models;
 
 namespace KeyToSpeech.ViewModels;
@@ -50,7 +51,23 @@ public partial class VoiceSettingsViewModel(VoiceService voiceService) : Observa
         voiceService.ActiveVoice.Intonation = number;
     }
 
+    public List<TomodachiLanguage> TomodachiLanguages { get; } =
+    [
+        TomodachiLanguage.UnitedStatesEnglish,
+        TomodachiLanguage.EuropeEnglish,
+        TomodachiLanguage.Spanish,
+        TomodachiLanguage.German,
+        TomodachiLanguage.French,
+        TomodachiLanguage.Italian,
+        TomodachiLanguage.Japanese,
+        TomodachiLanguage.Korean,
+    ];
 
+    [ObservableProperty]
+    public partial TomodachiLanguage ActiveLanguage { get; set;  } = TomodachiLanguage.UnitedStatesEnglish;
 
-
+    partial void OnActiveLanguageChanged(TomodachiLanguage value)
+    {
+        voiceService.ActiveVoice.Language = value;
+    }
 }
