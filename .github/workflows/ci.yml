@@ -52,7 +52,7 @@ jobs:
       matrix:
         configuration: [ Debug, Release ]
         os: [ 
-          windows,
+          windows-latest,
           ubuntu-latest ]
 
     name: Build & Test - Strict
