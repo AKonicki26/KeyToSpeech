@@ -14,7 +14,6 @@
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.7" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0-preview.6.26359.118" />
-        <PackageReference Include="Tmds.DBus.Protocol" Version="0.94.2" />
     </ItemGroup>
 
     <ItemGroup>
@@ -27,6 +26,9 @@
       <Compile Update="Views\VoiceSettingsPanel.axaml.cs">
         <DependentUpon>VoiceSettingsPanel.axaml</DependentUpon>
         <SubType>Code</SubType>
+
+
+
       </Compile>
     </ItemGroup>
 
