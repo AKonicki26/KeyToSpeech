@@ -1,0 +1,83 @@
+﻿name: CI
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+
+jobs:
+  # CI for dev branch. Allow for warnings in build, but also see if the build fails from warnings
+  build-permissive:
+    strategy:
+      matrix:
+        configuration: [ Debug, Release ]
+        os: [
+          windows
+          ubuntu-latest ]
+        
+    name: Build & Test - Permissive
+    runs-on: ${{ matrix.os }}
+    # This if statement hates me. I'll fix it later. Maybe
+    # if: ${{ github.event.pull_request.base.ref == 'refs/heads/dev' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        env:
+          GIT_SSL_NO_VERIFY: 'true'
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.x.x
+
+      - name: Restore workloads
+        shell: bash
+        run: dotnet workload restore
+
+      - name: Restore dependencies
+        shell: bash
+        run: dotnet restore
+        
+      - name: Build Extraction Solution
+        run: dotnet build KeyToSpeech.sln --configuration ${{ matrix.configuration }} --no-restore -p:TreatWarningsAsErrors=false
+        
+      - name: Test All Projects
+        run: dotnet test KeyToSpeech.sln --configuration ${{ matrix.configuration }} --no-build --verbosity normal
+    
+  build-strict:
+    strategy:
+      matrix:
+        configuration: [ Debug, Release ]
+        os: [ 
+          windows,
+          ubuntu-latest ]
+
+    name: Build & Test - Strict
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        env:
+          GIT_SSL_NO_VERIFY: 'true'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 10.x.x
+
+      - name: Restore workloads
+        shell: bash
+        run: dotnet workload restore
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build Extraction Solution
+        run: dotnet build KeyToSpeech.sln --configuration ${{ matrix.configuration }} --no-restore
+
+      - name: Test All Projects
+        run: dotnet test KeyToSpeech.sln --configuration ${{ matrix.configuration }} --no-build --verbosity normal
